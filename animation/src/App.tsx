@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -32,28 +32,16 @@ const Box = styled(motion.div)`
   align-items: center;
 `;
 
-const boxVariant = {
-  hover: { scale: 1.5, rotateZ: 90 },
-  click: { scale: 1, borderRadius: "100px" },
-  drag: { backgroundColor: "rgb(182, 227, 136)" },
-};
-
 function App() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
+  const x = useMotionValue(0);
+  useEffect(() => {
+    x.onChange(() => {
+      console.log(x.get());
+    });
+  }, [x]);
   return (
     <Wrapper>
-      <Container ref={containerRef}>
-        <Box
-          drag
-          dragSnapToOrigin
-          dragConstraints={containerRef}
-          variants={boxVariant}
-          whileHover="hover"
-          whileTap="click"
-          whileDrag="drag"
-        ></Box>
-      </Container>
+      <Box style={{ x }} drag="x" dragSnapToOrigin></Box>
     </Wrapper>
   );
 }
